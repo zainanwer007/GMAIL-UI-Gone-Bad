@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gmail // Terminal Edition</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Fake OS title bar -->
+  <div id="osBar">
+    <div class="os-left"><span class="status-dot"></span>GMAIL SESSION: <span class="status-text">ACTIVE</span></div>
+    <button id="logoutBtn">[&larr;] LOGOUT</button>
+  </div>
+
+  <!-- Fake browser chrome -->
+  <div id="browserChrome">
+    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+    <input id="urlBar" type="text" value="https://mail.google.com/mail/u/0/#terrible" readonly>
+  </div>
+
+  <header id="topbar">
+    <div id="logo">GMAIL</div>
+    <input type="text" id="searchBox" placeholder="Search mail">
+    <span id="searchStatus"></span>
+    <div id="userIcon" title="Account">Z</div>
+  </header>
+
+  <div id="app">
+    <nav id="sidebar">
+      <button id="composeBtn">+ COMPOSE</button>
+      <ul id="navList">
+        <li data-label="Inbox">Inbox</li>
+        <li data-label="Starred">Starred</li>
+        <li data-label="Sent">Sent</li>
+        <li data-label="Drafts">Drafts</li>
+        <li data-label="Trash">Trash</li>
+      </ul>
+    </nav>
+
+    <main id="emailListContainer">
+      <ul id="emailList"></ul>
+    </main>
+
+    <section id="readingPane">
+      <p id="placeholderText">SELECT AN EMAIL TO (MAYBE) READ IT.</p>
+    </section>
+  </div>
+
+  <!-- Compose modal -->
+  <div id="composeModal" class="hidden">
+    <div id="composeBox">
+      <div id="composeHeader">
+        <span>NEW MESSAGE</span>
+        <button id="closeCompose">X</button>
+      </div>
+      <input type="text" id="toField" placeholder="To">
+      <input type="text" id="subjectField" placeholder="Subject">
+      <textarea id="bodyField" placeholder="Type your message..."></textarea>
+      <div id="composeFooter">
+        <button id="sendBtn">SEND</button>
+        <button id="attachBtn">ATTACH</button>
+      </div>
+      <div id="autoSendTimer"></div>
+    </div>
+  </div>
+
+  <!-- ANTI-PATTERN 18: popup ad that appears every 10 seconds with a tiny close button -->
+  <div id="adOverlay" class="hidden">
+    <div id="adBox">
+      <button id="adCloseBtn">x</button>
+      <div id="adContent"></div>
+    </div>
+  </div>
+
+  <!-- Footer ticker -->
+  <div id="footerTicker">
+    <div class="ticker-track">
+      <span>YOU ARE USING THE WORST WEBSITE EVER &bull; WE HOPE YOU HATE IT &bull; HAVE A VERY BAD TIME!  &bull; CREATION OFTEAM INVICTUS &bull; </span>
+      <span> INCASE OF ANY QUERY CONTACT US &bull; zayn_einstein67@vmail.com AND karthik_edison69@vmail.com &bull; WE WILL SOLVE YOUR ISSUE WITHIN 5 YEARS &bull; </span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

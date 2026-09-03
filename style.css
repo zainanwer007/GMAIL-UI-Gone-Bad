@@ -1,0 +1,400 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+:root {
+  --bg: #0a0a0a;
+  --panel: #111511;
+  --green: #39ff14;
+  --green-dim: #1fae0d;
+  --yellow: #f4e04d;
+  --red: #ff4d4d;
+  --text: #d8ffd8;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; padding: 0; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 18px;
+}
+
+/* CRT scanline overlay -- purely decorative, sits on top of everything */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    rgba(0,0,0,0) 0px, rgba(0,0,0,0) 1px,
+    rgba(57,255,20,0.025) 2px
+  );
+}
+
+/* ---- Fake OS title bar ---- */
+#osBar {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #000;
+  color: #fff;
+  padding: 8px 16px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  border-bottom: 2px solid var(--green);
+}
+.status-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  margin-right: 8px;
+}
+.status-text { color: var(--green); }
+#logoutBtn {
+  background: #000;
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 6px 10px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  cursor: pointer;
+}
+#logoutBtn:hover { background: #222; }
+
+/* ---- Fake browser chrome ---- */
+#browserChrome {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1a1a1a;
+  padding: 8px 12px;
+  border-bottom: 2px solid #333;
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.dot.red { background: #ff5f56; }
+.dot.yellow { background: #ffbd2e; }
+.dot.green { background: #27c93f; }
+#urlBar {
+  flex: 1;
+  margin-left: 12px;
+  background: #0d0d0d;
+  color: var(--green);
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+}
+
+/* ---- Top bar (Gmail logo/search) ---- */
+#topbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--green-dim);
+}
+#logo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: var(--yellow);
+  text-shadow: 0 0 6px var(--yellow);
+}
+#searchBox {
+  flex: 1;
+  max-width: 500px;
+  padding: 8px 12px;
+  border-radius: 2px;
+  border: 1px solid var(--green-dim);
+  background: #000;
+  color: var(--green);
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+}
+#searchStatus { font-size: 12px; color: var(--yellow); font-style: italic; }
+#userIcon {
+  margin-left: auto;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #000;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: bold;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  box-shadow: 0 0 8px var(--green);
+}
+
+/* ---- App layout ---- */
+#app {
+  flex: 1 1 auto;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+#sidebar {
+  flex: 0 0 200px;
+  padding: 16px 10px;
+  background: var(--panel);
+  border-right: 1px solid var(--green-dim);
+  overflow-y: auto;
+}
+#composeBtn {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--yellow);
+  background: #000;
+  color: var(--yellow);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+#composeBtn:hover { background: var(--yellow); color: #000; }
+
+#navList { list-style: none; padding: 0; margin: 0; }
+#navList li {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: var(--green);
+  border-left: 3px solid transparent;
+  margin-bottom: 4px;
+}
+#navList li:hover { background: #1a1a1a; }
+#navList li.active-fake {
+  border-left: 3px solid var(--yellow);
+  color: var(--yellow);
+  background: #1a1a1a;
+}
+
+/* ---- Email list ---- */
+#emailListContainer {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  background: #0d0d0d;
+  border-right: 1px solid var(--green-dim);
+  min-width: 0;
+}
+#emailList { list-style: none; margin: 0; padding: 0; }
+#emailList li {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #1a1a1a;
+  cursor: pointer;
+  font-family: 'VT323', monospace;
+  font-size: 17px;
+  color: #9fdc9f;
+}
+#emailList li.unread {
+  color: var(--green);
+  font-weight: bold;
+  background: #0f1a0f;
+  text-shadow: 0 0 3px var(--green);
+}
+#emailList li .sender { width: 140px; flex-shrink: 0; color: var(--yellow); }
+#emailList li .snippet { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---- Reading pane ---- */
+#readingPane {
+  flex: 0 0 400px;
+  padding: 24px;
+  overflow-y: auto;
+  background: var(--panel);
+}
+#readingPane h2 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: var(--yellow);
+  text-shadow: 0 0 6px var(--yellow);
+  line-height: 1.6;
+}
+.pane-actions button {
+  margin-right: 8px;
+  margin-top: 16px;
+  padding: 8px 14px;
+  border: 1px solid var(--green-dim);
+  background: #000;
+  color: var(--green);
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  cursor: pointer;
+}
+.pane-actions button:hover { background: var(--green); color: #000; }
+.danger-btn { border: 1px solid var(--red) !important; color: var(--red) !important; }
+.danger-btn:hover { background: var(--red) !important; color: #000 !important; }
+
+/* ---- Compose modal ---- */
+#composeModal { position: fixed; bottom: 0; right: 40px; z-index: 100; }
+#composeModal.hidden { display: none; }
+#composeBox {
+  width: 380px;
+  background: #0d0d0d;
+  border: 2px solid var(--green);
+  box-shadow: 0 0 20px var(--green);
+  border-radius: 6px 6px 0 0;
+  position: relative;
+}
+#composeHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #000;
+  color: var(--yellow);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  border-radius: 6px 6px 0 0;
+}
+#composeHeader button { background: none; border: none; color: var(--yellow); cursor: pointer; font-size: 14px; }
+#composeBox input, #composeBox textarea {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #1a1a1a;
+  padding: 10px 14px;
+  font-size: 15px;
+  outline: none;
+  background: #0a0a0a;
+  color: var(--green);
+  font-family: 'VT323', monospace;
+}
+#composeBox textarea { height: 140px; resize: none; }
+#composeFooter { position: relative; height: 60px; padding: 10px 14px; }
+#sendBtn {
+  position: absolute;
+  left: 14px; top: 14px;
+  padding: 8px 20px;
+  background: var(--green);
+  color: #000;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: left 0.1s, top 0.1s;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+}
+#attachBtn {
+  position: absolute;
+  right: 14px; top: 14px;
+  padding: 8px 14px;
+  border: 1px solid var(--green-dim);
+  background: #000;
+  color: var(--green);
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+}
+#autoSendTimer { padding: 4px 14px 10px; font-size: 12px; color: var(--red); font-family: 'VT323', monospace; }
+
+/* ---- ANTI-PATTERN 18: popup ad overlay ---- */
+#adOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#adOverlay.hidden { display: none; }
+
+#adBox {
+  position: relative;
+  width: 420px;
+  max-width: 90vw;
+  padding: 28px 24px;
+  background: linear-gradient(135deg, #ffbd2e, #ff4d4d 60%, #f4e04d);
+  border: 3px dashed #000;
+  border-radius: 4px;
+  box-shadow: 0 0 40px rgba(255, 77, 77, 0.8);
+  animation: adPulse 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes adPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.02); }
+}
+
+#adContent {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #000;
+  text-align: center;
+  text-shadow: 0 0 2px #fff;
+}
+
+#adContent .ad-headline {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 14px;
+  color: #b00000;
+}
+
+#adContent .ad-cta {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 10px 16px;
+  background: #000;
+  color: var(--green);
+  font-size: 11px;
+  border: 2px solid var(--green);
+  cursor: default;
+}
+
+/* The close button relocates to a random corner each time an ad
+   opens (so you can't build muscle memory for where it'll be), but
+   it's sized and colored to be easy to spot once you look. */
+#adCloseBtn {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  line-height: 26px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 50%;
+  cursor: pointer;
+  top: 6px;
+  right: 6px;
+  box-shadow: 0 0 0 2px #fff, 0 0 6px rgba(0,0,0,0.6);
+}
+#adCloseBtn:hover { background: var(--red); color: #fff; }
+
+/* ---- Footer ticker ---- */
+#footerTicker {
+  flex: 0 0 auto;
+  background: #000;
+  border-top: 2px solid var(--green);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 6px 0;
+}
+.ticker-track { display: inline-flex; animation: scrollTicker 20s linear infinite; }
+.ticker-track span {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: var(--green);
+  padding-right: 20px;
+}
+@keyframes scrollTicker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
